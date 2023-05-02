@@ -70,8 +70,6 @@ async def startmessage(message: types.Message):
     try:
         user = str(message.from_user.id)
         print(user)
-        # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', # ноутбук
-        #                 password='KokoRari-23', host='localhost', port='5432')
         db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
                 password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
         cur = db.cursor()
@@ -127,8 +125,6 @@ async def redact_ex(message: types.Message):
 
 @dp.message_handler(state=Statess.red_set)
 async def red_del_func(message: types.Message, state: FSMContext):
-    # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', # ноутбук
-    #         password='KokoRari-23', host='localhost', port='5432')
     db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
             password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
     cur = db.cursor()
@@ -160,8 +156,6 @@ async def xls_import(message: types.Message, state: FSMContext):
                 markup_del_xls = types.InlineKeyboardMarkup(row_width=2)
                 btn_del_xls = types.InlineKeyboardButton("Вернуться в главное меню", callback_data="helpmsg")
                 markup_del_xls.add(btn_del_xls)
-                # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', # ноутбук
-                #         password='KokoRari-23', host='localhost', port='5432')
                 db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', #Комп
                         password='Ghg3500pol', host='localhost', port='5432')
                 cur = db.cursor()
@@ -255,9 +249,6 @@ async def red_card_or_cash(message: types.Message, state: FSMContext):
 async def red_update_db(message: types.Message, state: FSMContext):
     A.append(message.text)
     print(A)
-    # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres',  #Ноут
-    #                     password='KokoRari-23', host='localhost', port='5432')
-
     db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
             password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
 
@@ -324,19 +315,6 @@ async def help_function(message: types.Message, state: FSMContext):
         if message.text != 'Отмена' and message.text != 'Ввод' and message.text != 'Инструкция':
             await bot.send_message(message.from_user.id, '''Напишите любое сообщение для подтверждения''')
             await Statess.user_enter.set()
-#         else:
-            # markup_back_to_menu = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, one_time_keyboard=True)
-            # mbtm = types.InlineKeyboardButton("❌Отмена", callback_data="helpmsg")
-            # markup_back_to_menu.add(mbtm)
-#             await bot.send_message(message.from_user.id, '''Для подтверждения действия напишите любое сообщение или символ
-# Для отмены нажмите на кнопку "❌Отмена" ''', reply_markup=markup_back_to_menu)
-#             await Statess.user_enter.set()
-
-
-# dp.message_handler(content_types=types.ContentTypes.TEXT, state=Statess.help_button)
-# async def next_add(message: types.Message):
-#      if message.text == 'Ввод':
-#             await Statess.next()
         
 @dp.message_handler(state=Statess.user_enter)
 async def addexp_ctg(message: types.Message, state: FSMContext):
@@ -410,9 +388,6 @@ async def save_db(message: types.Message, state: FSMContext):
     A.append(message.text)
     print(A)
     curData = datetime.date.today()
-    # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres',  #Ноут
-    #                     password='KokoRari-23', host='localhost', port='5432')
-
     db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
             password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
 
@@ -434,9 +409,6 @@ async def save_db(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(text= "analize")
 async def analize(message):
     try:
-        # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', #Ноут
-        #                     password='KokoRari-23', host='localhost', port='5432')
-
         db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
                 password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
 
@@ -445,7 +417,7 @@ async def analize(message):
         cur.execute(f'''SELECT * FROM "{user_analize}" ''')
         analize_res = cur.fetchall()
         print(analize_res)
-        headers = [col[0] for col in cur.description] # get headers
+        headers = [col[0] for col in cur.description]
         analize_res.insert(0, tuple(headers))
         fp = open('fin_tab.csv', 'w', encoding="utf-8", newline = '') 
         myFile = csv.writer(fp)
@@ -481,7 +453,7 @@ async def analize(message):
         cur.execute(f'''SELECT * FROM "{user_analize}" WHERE date_trunc('month', time) = date_trunc('month', current_timestamp) ''')
         analize_res_month = cur.fetchall()
         print(analize_res_month)
-        headers_month = [col_month[0] for col_month in cur.description] # get headers
+        headers_month = [col_month[0] for col_month in cur.description]
         analize_res_month.insert(0, tuple(headers_month))
         fpm = open('fin_tab_Month.csv', 'w', encoding="utf-8", newline = '') 
         myFileM = csv.writer(fpm)
@@ -515,7 +487,7 @@ async def analize(message):
         cur.execute(f'''SELECT * FROM "{user_analize}" WHERE date_trunc('week', time) = date_trunc('week', current_timestamp) ''')
         analize_res_week = cur.fetchall()
         print(analize_res_week)
-        headers_week = [col_week[0] for col_week in cur.description] # get headers
+        headers_week = [col_week[0] for col_week in cur.description]
         analize_res_week.insert(0, tuple(headers_week))
         fpw = open('fin_tab_week.csv', 'w', encoding="utf-8", newline = '') 
         myFileW = csv.writer(fpw)
@@ -593,9 +565,6 @@ async def change_adv(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(text="db") 
 async def file_table(message):
-    # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', #Ноут
-    #                     password='KokoRari-23', host='localhost', port='5432')
-    
     db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
             password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
 
@@ -616,8 +585,6 @@ async def file_table(message):
             cell = sheet.cell(row = i, column = j)
             cell.value = col
             j += 1
-    
-    # (D) SAVE EXCEL FILE & CLOSE DB
     book.save("Финансы.xlsx")
     db.close()
     await bot.send_message(message.from_user.id, '''Ваша База данных, пожалуйста:''')
@@ -651,9 +618,6 @@ async def info_day(message: types.Message, state: FSMContext):
         info_user_message.append(message.text)
         print(info_user_message)
         delete_day = types.ReplyKeyboardRemove() 
-        # db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', 
-        #                 password='KokoRari-23', host='localhost', port='5432')
-
         db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
                 password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
         cur = db.cursor()
