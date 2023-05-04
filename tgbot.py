@@ -156,8 +156,8 @@ async def xls_import(message: types.Message, state: FSMContext):
                 markup_del_xls = types.InlineKeyboardMarkup(row_width=2)
                 btn_del_xls = types.InlineKeyboardButton("Вернуться в главное меню", callback_data="helpmsg")
                 markup_del_xls.add(btn_del_xls)
-                db =  psycopg2.connect(dbname='TelegramFinanseBot', user='postgres', #Комп
-                        password='Ghg3500pol', host='localhost', port='5432')
+                db =  psycopg2.connect(dbname=(os.getenv('DBNAME')), user=(os.getenv('USER')), #Комп
+                        password=(os.getenv('PASSWORD')), host=(os.getenv('HOST')), port=(os.getenv('PORT')))
                 cur = db.cursor()
                 user_xls = str(message.from_user.id)
                 file_path = await bot.download_file_by_id(message.document.file_id)
